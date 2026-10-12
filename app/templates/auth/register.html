@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Регистрация — {{ app_name }}{% endblock %}
+{% block content %}
+<h1>Регистрация</h1>
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+<form method="post" action="/auth/register">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <div class="row">
+    <label>Имя пользователя</label>
+    <input type="text" name="username" value="{{ username or '' }}" required minlength="3" maxlength="32">
+  </div>
+  <div class="row">
+    <label>Email</label>
+    <input type="email" name="email" value="{{ email or '' }}" required maxlength="255">
+  </div>
+  <div class="row">
+    <label>Пароль (минимум 10 символов, буквы и цифры)</label>
+    <input type="password" name="password" required minlength="10">
+  </div>
+  <div class="actions"><button class="btn" type="submit">Зарегистрироваться</button></div>
+</form>
+{% endblock %}

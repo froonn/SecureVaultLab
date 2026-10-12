@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{% if item %}Редактирование{% else %}Новая конфиденциальная запись{% endif %} — {{ app_name }}{% endblock %}
+{% block content %}
+<h1>{% if item %}Редактировать{% else %}Новая конфиденциальная запись{% endif %}</h1>
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+<form method="post" action="{% if item %}/confidential/{{ item.id }}/edit{% else %}/confidential/new{% endif %}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <div class="row">
+    <label>Заголовок</label>
+    <input type="text" name="title" value="{{ title or (item.title if item else '') }}" required maxlength="200">
+  </div>
+  <div class="row">
+    <label>Содержимое (шифруется перед записью в БД)</label>
+    <textarea name="content" required>{% if content is defined %}{{ content }}{% endif %}</textarea>
+  </div>
+  <div class="actions">
+    <button class="btn" type="submit">Сохранить</button>
+    <a class="btn" href="/confidential">Отмена</a>
+  </div>
+</form>
+{% endblock %}

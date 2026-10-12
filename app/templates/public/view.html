@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Публичная запись — {{ app_name }}{% endblock %}
+{% block content %}
+{% if item is none %}
+  <h1>Запись не найдена</h1>
+{% else %}
+  <h1>{{ item.title }}</h1>
+  <div class="muted">Автор #{{ item.owner_id }} · {{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+  <div class="card" style="white-space: pre-wrap;">{{ item.content }}</div>
+  {% if user and user.id == item.owner_id %}
+    <div class="actions">
+      <a class="btn" href="/public/{{ item.id }}/edit">Редактировать</a>
+      <form method="post" action="/public/{{ item.id }}/delete" onsubmit="return confirm('Удалить запись?');">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button class="btn btn-danger" type="submit">Удалить</button>
+      </form>
+    </div>
+  {% endif %}
+{% endif %}
+<p><a href="/public">← К списку</a></p>
+{% endblock %}

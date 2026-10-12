@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Конфиденциальная запись — {{ app_name }}{% endblock %}
+{% block content %}
+<h1>{{ item.title }}</h1>
+<div class="muted">{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+<div class="card" style="white-space: pre-wrap;">{{ content }}</div>
+<div class="actions">
+  <a class="btn" href="/confidential/{{ item.id }}/edit">Редактировать</a>
+  <form method="post" action="/confidential/{{ item.id }}/delete" onsubmit="return confirm('Удалить запись?');">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button class="btn btn-danger" type="submit">Удалить</button>
+  </form>
+</div>
+<p><a href="/confidential">← К списку</a></p>
+{% endblock %}

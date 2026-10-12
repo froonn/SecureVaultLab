@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Конфиденциальные записи — {{ app_name }}{% endblock %}
+{% block content %}
+<h1>Мои конфиденциальные записи</h1>
+<p><a class="btn" href="/confidential/new">Создать</a></p>
+<form method="get" action="/confidential" class="actions" style="margin: .5rem 0;">
+  <input type="text" name="q" value="{{ q }}" placeholder="Поиск по заголовку...">
+  <button class="btn" type="submit">Найти</button>
+</form>
+{% if items %}
+  {% for it in items %}
+    <div class="card">
+      <h3><a href="/confidential/{{ it.id }}">{{ it.title }}</a></h3>
+      <div class="muted">{{ it.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p class="muted">Записей нет.</p>
+{% endif %}
+{% endblock %}

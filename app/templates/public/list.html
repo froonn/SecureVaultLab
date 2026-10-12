@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Публичные записи — {{ app_name }}{% endblock %}
+{% block content %}
+<h1>Публичные записи</h1>
+{% if user %}<p><a class="btn" href="/public/new">Создать</a></p>{% endif %}
+<form method="get" action="/public" class="actions" style="margin: .5rem 0;">
+  <input type="text" name="q" value="{{ q }}" placeholder="Поиск...">
+  <button class="btn" type="submit">Найти</button>
+</form>
+{% if items %}
+  {% for it in items %}
+    <div class="card">
+      <h3><a href="/public/{{ it.id }}">{{ it.title }}</a></h3>
+      <div class="muted">Автор #{{ it.owner_id }} · {{ it.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p class="muted">Записей не найдено.</p>
+{% endif %}
+{% endblock %}

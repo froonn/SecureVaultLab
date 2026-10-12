@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{% if item %}Редактирование{% else %}Новая публичная запись{% endif %} — {{ app_name }}{% endblock %}
+{% block content %}
+<h1>{% if item %}Редактировать{% else %}Новая публичная запись{% endif %}</h1>
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+<form method="post" action="{% if item %}/public/{{ item.id }}/edit{% else %}/public/new{% endif %}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <div class="row">
+    <label>Заголовок</label>
+    <input type="text" name="title" value="{{ title or (item.title if item else '') }}" required maxlength="200">
+  </div>
+  <div class="row">
+    <label>Содержимое</label>
+    <textarea name="content" required>{% if content is defined %}{{ content }}{% elif item %}{{ item.content }}{% endif %}</textarea>
+  </div>
+  <div class="actions">
+    <button class="btn" type="submit">Сохранить</button>
+    <a class="btn" href="/public">Отмена</a>
+  </div>
+</form>
+{% endblock %}
