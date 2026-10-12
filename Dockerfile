@@ -27,7 +27,7 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock ./
 
 # Установка зависимостей проекта (без разработки, если не нужны тесты в продакшн-образе)
-RUN poetry install --no-root --without dev
+RUN poetry install --no-root
 
 # Копируем остальной код приложения
 COPY app ./app
