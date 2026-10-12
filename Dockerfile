@@ -3,7 +3,7 @@ FROM python:3.14-slim AS base
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
-    POETRY_VERSION=1.8.3 \
+    POETRY_VERSION=2.2.1 \
     POETRY_HOME="/opt/poetry" \
     POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=false
@@ -12,8 +12,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
 # Минимальный набор системных зависимостей и установка Poetry
-RUN apt-get update \
- && apt-get install -y --no-install-recommends \
+RUN apt update \
+ && apt install -y --no-install-recommends \
     ca-certificates curl \
  && curl -sSL https://install.python-poetry.org | python3 - \
  && rm -rf /var/lib/apt/lists/*

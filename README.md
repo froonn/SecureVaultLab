@@ -70,7 +70,7 @@
 
 ## Технологии
 
-- Python 3.12
+- Python 3.14
 - FastAPI + Uvicorn
 - Jinja2 (HTML-шаблоны)
 - SQLAlchemy 2.0 (sync) + SQLite (WAL)
@@ -133,7 +133,7 @@ chmod 600 secrets/fernet_key
 Если пакет `cryptography` не установлен на хосте — можно сгенерировать ключ внутри контейнера:
 
 ```bash
-docker run --rm python:3.12-slim sh -c "pip install cryptography -q && python -c \"from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())\"" > secrets/fernet_key
+docker run --rm python:3.14-slim sh -c "pip install cryptography -q && python -c \"from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())\"" > secrets/fernet_key
 chmod 600 secrets/fernet_key
 ```
 
