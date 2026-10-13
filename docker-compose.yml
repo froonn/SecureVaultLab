@@ -3,11 +3,13 @@ services:
     build: .
     container_name: lab21_app
     restart: unless-stopped
+    secrets:
+      - fernet_key                     # ← оставляем только это
     env_file:
       - .env
     volumes:
       - ./data:/data
-      - ./secrets/fernet_key:/run/secrets/fernet_key:ro
+      # - ./secrets/fernet_key:/run/secrets/fernet_key:ro   ← УДАЛИТЬ
     networks:
       - app_net
     # наружу порт не публикуем — только через nginx
@@ -48,3 +50,7 @@ services:
 networks:
   app_net:
     driver: bridge
+
+secrets:
+  fernet_key:
+    file: ./secrets/fernet_key
