@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Публичные записи</h1>
 {% if user %}<p><a class="btn" href="/public/new">Создать</a></p>{% endif %}
-<form method="get" action="/public" class="actions" style="margin: .5rem 0;">
+<form method="get" action="/public" class="actions mb-sm">
   <input type="text" name="q" value="{{ q }}" placeholder="Поиск...">
   <button class="btn" type="submit">Найти</button>
 </form>

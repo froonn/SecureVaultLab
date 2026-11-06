@@ -36,7 +36,7 @@ services:
         condition: service_healthy
     ports:
       - "8443:8443"
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/proxy_params_inline.conf:/etc/nginx/proxy_params_inline.conf:ro

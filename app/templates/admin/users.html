@@ -2,7 +2,7 @@
 {% block title %}Админка — {{ app_name }}{% endblock %}
 {% block content %}
 <h1>Пользователи</h1>
-<form method="get" action="/admin/users" class="actions" style="margin: .5rem 0;">
+<form method="get" action="/admin/users" class="actions mb-sm">
   <input type="text" name="q" value="{{ q }}" placeholder="Поиск...">
   <button class="btn" type="submit">Найти</button>
 </form>
@@ -12,7 +12,7 @@
       <div><strong>#{{ u.id }} {{ u.username }}</strong> — {{ u.email }}</div>
       <div class="muted">role={{ u.role }}, active={{ u.is_active }}, created={{ u.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
       {% if u.id != user.id %}
-        <form method="post" action="/admin/users/{{ u.id }}/toggle" style="margin-top:.4rem;">
+        <form method="post" action="/admin/users/{{ u.id }}/toggle" class="mt-xs">
           <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
           <button class="btn" type="submit">{% if u.is_active %}Заблокировать{% else %}Разблокировать{% endif %}</button>
         </form>

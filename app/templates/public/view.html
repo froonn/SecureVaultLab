@@ -6,7 +6,7 @@
 {% else %}
   <h1>{{ item.title }}</h1>
   <div class="muted">Автор #{{ item.owner_id }} · {{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
-  <div class="card" style="white-space: pre-wrap;">{{ item.content }}</div>
+  <div class="card pre">{{ item.content }}</div>
   {% if user and user.id == item.owner_id %}
     <div class="actions">
       <a class="btn" href="/public/{{ item.id }}/edit">Редактировать</a>

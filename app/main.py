@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import PlainTextResponse
+from fastapi.staticfiles import StaticFiles
 
 from .config import get_settings
 from .db import Base, engine, SessionLocal
@@ -33,8 +34,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
 # Доверяем Host-заголовку только ожидаемым именам
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["localhost", "127.0.0.1", "app", "testserver", "*.ngrok-free.app", "*"])
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=["localhost", "127.0.0.1", "app", "testserver", "35.212.184.100", "*.ngrok-free.app"])
 
 
 @app.middleware("http")

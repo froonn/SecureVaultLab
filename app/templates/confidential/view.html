@@ -3,7 +3,7 @@
 {% block content %}
 <h1>{{ item.title }}</h1>
 <div class="muted">{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
-<div class="card" style="white-space: pre-wrap;">{{ content }}</div>
+<div class="card pre">{{ content }}</div>
 <div class="actions">
   <a class="btn" href="/confidential/{{ item.id }}/edit">Редактировать</a>
   <form method="post" action="/confidential/{{ item.id }}/delete" onsubmit="return confirm('Удалить запись?');">

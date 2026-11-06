@@ -13,9 +13,11 @@ DbDep = Annotated[OrmSession, Depends(get_db)]
 
 
 def get_client_ip(request: Request) -> str | None:
-    xff = request.headers.get("x-forwarded-for")
-    if xff:
-        return xff.split(",")[0].strip()
+    # За доверенным обратным прокси (nginx) используем X-Real-IP:
+    # прокси выставляет его из peer-адреса и перезаписывает клиентский заголовок.
+    real = request.headers.get("x-real-ip")
+    if real:
+        return real.strip()
     return request.client.host if request.client else None
 
 
