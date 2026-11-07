@@ -42,6 +42,9 @@ def register_user(db: OrmSession, *, username: str, email: str, password: str) -
         select(User).where(or_(User.username == username, User.email == email.lower()))
     ).scalar_one_or_none()
     if existing is not None:
+        # Считаем хэш и на этой ветке, чтобы время ответа при занятом
+        # имени/email не отличалось от ветки создания (анти-enumeration по таймингу).
+        hash_password(password)
         raise UserError("Пользователь с таким именем или email уже существует")
 
     user = User(
@@ -94,6 +97,11 @@ def set_active(db: OrmSession, user_id: int, active: bool) -> User | None:
     user.is_active = active
     db.commit()
     db.refresh(user)
+    if not active:
+        # Блокировка должна немедленно завершать все активные сессии пользователя,
+        # иначе выданная ранее cookie продолжает работать до истечения TTL.
+        from ..security.sessions import revoke_all_user_sessions
+        revoke_all_user_sessions(db, user_id)
     return user
 
 

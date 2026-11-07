@@ -71,6 +71,19 @@ def revoke_all_user_sessions(db: OrmSession, user_id: int, *, keep_sid: str | No
     db.commit()
 
 
+def purge_expired_sessions(db: OrmSession) -> int:
+    """Удаляет все протухшие сессии (анонимные и пользовательские).
+
+    Вызывается на старте приложения и при логине, чтобы таблица sessions
+    не росла неограниченно (ленивого удаления по TTL недостаточно).
+    """
+    result = db.execute(
+        delete(SessionModel).where(SessionModel.expires_at <= datetime.now(timezone.utc))
+    )
+    db.commit()
+    return result.rowcount or 0
+
+
 def rotate_session(db: OrmSession, old_token: str | None, user: User, *, ip: str | None, user_agent: str | None) -> tuple[str, SessionModel]:
     """Регенерация ID сессии при логине — защита от session fixation."""
     revoke_session(db, old_token)

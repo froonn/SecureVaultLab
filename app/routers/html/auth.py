@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 
 from ...db import get_db
 from ...deps import DbDep, OptionalUser, get_client_ip
-from ...security.sessions import bind_user_and_rotate, revoke_session
+from ...security.sessions import bind_user_and_rotate, revoke_session, purge_expired_sessions
 from ...services import users as users_service
 from ...services.audit import log_action
 from ._common import render, require_csrf, redirect
@@ -69,6 +69,7 @@ def login_submit(
         return render(request, "auth/login.html",
                       sess=sess, user=None, ctx={"error": "Неверное имя пользователя или пароль", "login": login})
 
+    purge_expired_sessions(db)
     new_token, new_sess = bind_user_and_rotate(
         db, sess, u,
         ip=get_client_ip(request),

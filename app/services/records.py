@@ -104,7 +104,12 @@ def list_confidential(db: OrmSession, owner: User, *, q: str | None = None, limi
 
 
 def decrypt_confidential(record: ConfidentialRecord) -> str:
-    return decrypt_text(record.content_encrypted)
+    try:
+        return decrypt_text(record.content_encrypted)
+    except ValueError as e:
+        # Битый шифротекст/неверный ключ не должен приводить к 500 —
+        # роутеры ловят RecordError и мягко редиректят.
+        raise RecordError("Не удалось расшифровать запись") from e
 
 
 def update_confidential(db: OrmSession, owner: User, record_id: int, *, title: str, content: str) -> ConfidentialRecord:

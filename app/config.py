@@ -12,7 +12,6 @@ class Settings(BaseSettings):
     )
 
     app_env: str = "dev"
-    app_secret_key: str = "change_me"
 
     database_url: str = "sqlite:////data/app.db"
 

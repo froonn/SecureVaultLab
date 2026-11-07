@@ -9,7 +9,7 @@ from .config import get_settings
 from .db import Base, engine, SessionLocal
 from . import models  # noqa: F401
 from .models import Session as SessionModel, User
-from .security.sessions import create_anonymous_session, get_session
+from .security.sessions import create_anonymous_session, get_session, purge_expired_sessions
 from .routers.html import auth as html_auth
 from .routers.html import public as html_public
 from .routers.html import confidential as html_confidential
@@ -23,6 +23,9 @@ settings = get_settings()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
+    # Чистим протухшие сессии при старте, чтобы таблица не росла бесконечно.
+    with SessionLocal() as db:
+        purge_expired_sessions(db)
     yield
 
 
@@ -42,7 +45,9 @@ app.add_middleware(TrustedHostMiddleware, allowed_hosts=["localhost", "127.0.0.1
 
 @app.middleware("http")
 async def session_middleware(request: Request, call_next):
-    if request.url.path.startswith("/static"):
+    # Не заводим сессию для запросов, которым она не нужна: статика,
+    # healthcheck (каждые 10 с) и favicon — иначе таблица сессий раздувается.
+    if request.url.path.startswith("/static") or request.url.path in ("/healthz", "/favicon.ico"):
         return await call_next(request)
 
     new_token = None
